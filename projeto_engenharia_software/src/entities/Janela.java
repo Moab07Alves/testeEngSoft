@@ -16,7 +16,7 @@ public class Janela extends JFrame {
 
     public Janela(String caminhoFoto) throws IOException {
         this.stream = getClass().getResourceAsStream(caminhoFoto);
-        this.image = ImageIO.read(this.stream);
+        this.image = ImageIO.read(stream);
         this.imageIcon = new ImageIcon(image);
         this.imageLabel = new JLabel();
 
