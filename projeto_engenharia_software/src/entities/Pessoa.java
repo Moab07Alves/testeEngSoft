@@ -13,7 +13,7 @@ public class Pessoa {
         this.nome = nome;
         this.usuario = usuario;
         this.senha = senha;
-        this.galeria = new Galeria(this);
+        this.galeria = new Galeria();
     }
 
     public String getNome() {
