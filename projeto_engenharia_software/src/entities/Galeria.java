@@ -29,15 +29,7 @@ public class Galeria {
     }
 
     public void recuperarFotos() throws IOException {
-        List<String> pathRecuperadoFoto = gravadorCaminhoFoto.recuperarTextoDeArquivo();
-        for (String pathImagem: pathRecuperadoFoto) {
-            this.caminhoFotos.add(pathImagem);
-        }
 
-        List<String> descricaoImagem = gravadorCaminhoFoto.recuperarTextoDeArquivo();
-        for (String descricaoImag: descricaoImagem) {
-            this.caminhoFotos.add(descricaoImag);
-        }
 
 
     }
