@@ -15,7 +15,7 @@ public class SistemaPessoas {
 
     public SistemaPessoas(int tamanho){
         this.pessoas = new ArrayList<>(tamanho);
-        this.gravadorDeDados = new GravadorDeDados("testeEngSoft/projeto_engenharia_software/usuarios.txt");
+        this.gravadorDeDados = new GravadorDeDados("usuarios.txt");
     }
 
     public void addPessoa(Pessoa pessoa){

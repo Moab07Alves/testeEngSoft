@@ -8,7 +8,7 @@ public class Pessoa {
     private String senha;
     private List<Galeria> galeria = new ArrayList<>();
 
-    public Pessoa(int id, String nome, String usuario, String senha) throws IOException {
+    public Pessoa(String usuario, String senha) throws IOException {
         this.usuario = usuario;
         this.senha = senha;
     }
@@ -28,8 +28,18 @@ public class Pessoa {
 
     public String getSenha(){ return this.senha; }
 
-    public List<Galeria> getGaleria() {
-        return galeria;
+    public StringBuilder getGaleria() {
+        StringBuilder titulosGaleria = new StringBuilder();
+        if(this.galeria.size() != 0) {
+            for (int i = 1; i <= this.galeria.size(); i++) {
+                titulosGaleria.append(i + "- " + this.galeria.get(i).getTitulo() + ", QUANTIDADE DE FOTOS: " + this.galeria.get(i).quantidadeFotos());
+            }
+        }
+        else {
+            titulosGaleria.append("O usuário não possui nenhuma galeria");
+        }
+
+        return titulosGaleria;
     }
 
     @Override

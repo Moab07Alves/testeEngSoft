@@ -28,6 +28,8 @@ public class Main {
             entUsuario.add(password);
             JOptionPane.showMessageDialog(null, entUsuario, "Digite a sua senha", JOptionPane.PLAIN_MESSAGE);
             senha = gerarSenhaHex(password.getText());
+            Pessoa pesoa = new Pessoa(usuario, senha);
+            sistema.addPessoa(pesoa);
             String opcao = JOptionPane.showInputDialog(null, "Escolha uma opção:\n" +
                     "1 - Adicionar fotos\n" +
                     "2 - Remover foto\n" +
@@ -37,6 +39,7 @@ public class Main {
 
             switch (opcao) {
                 case "1":
+                    JOptionPane.showMessageDialog(null, pesoa.getGaleria());
                     break;
 
                 case "2":
