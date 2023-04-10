@@ -2,6 +2,7 @@ import entities.GravadorDeDados;
 import entities.Janela;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -14,13 +15,17 @@ public class Main {
     static final int MAX = 1000;
     static SistemaPessoas sistema = new SistemaPessoas(MAX);
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+        try {
+            sistema.recuperarPessoas();
+        } catch(FileNotFoundException e) {
+        }
+
         String usuario;
         String senha;
         //Janela paisagem = new Janela("/paisagem.jpg", "Foto de paisagem", "22/04/23");
-
         int novoUsuario = JOptionPane.showConfirmDialog(null,"Novo Usuário?(Yes = Sim, No = Não)","Escolha um",JOptionPane.YES_NO_OPTION);
 
-        if(novoUsuario == 0){ // Opcao = 0 - Sim, o usuário não tem acesso ao nosso sistema
+        if(novoUsuario == 0) { // Opcao = 0 - Sim, o usuário não tem acesso ao nosso sistema
             usuario = JOptionPane.showInputDialog("Digite o seu novo nome de usuário");
             JPasswordField password = new JPasswordField(10);
             password.setEchoChar('*');
@@ -28,31 +33,14 @@ public class Main {
             entUsuario.add(password);
             JOptionPane.showMessageDialog(null, entUsuario, "Digite a sua senha", JOptionPane.PLAIN_MESSAGE);
             senha = gerarSenhaHex(password.getText());
-            Pessoa pesoa = new Pessoa(usuario, senha);
-            sistema.addPessoa(pesoa);
-            String opcao = JOptionPane.showInputDialog(null, "Escolha uma opção:\n" +
-                    "1 - Adicionar fotos\n" +
-                    "2 - Remover foto\n" +
-                    "3 - Ver fotos\n" +
-                    "4 - Procurar foto por data\n" +
-                    "5 - Procurar foto por filho\n");
-
-            switch (opcao) {
-                case "1":
-                    JOptionPane.showMessageDialog(null, pesoa.getGaleria());
-                    break;
-
-                case "2":
-                    break;
-
-                case "3":
-                    break;
-
-                case "4":
-                    break;
-
-                case "5":
-                    break;
+            Pessoa pessoa = new Pessoa(usuario, senha);
+            if(sistema.verificarPessoa(usuario, senha)) {
+                menu(new Pessoa(usuario, senha));
+            }
+            else {
+                sistema.addPessoa(pessoa);
+                sistema.salvarPessoas();
+                menu(pessoa);
             }
         }
         else{ // Opcao = 1 - Não, o usuário já tem acesso ao nosso sistema
@@ -63,14 +51,15 @@ public class Main {
             entUsuario.add(password);
             JOptionPane.showMessageDialog(null, entUsuario, "Digite a sua senha", JOptionPane.PLAIN_MESSAGE);
             senha = gerarSenhaHex(password.getText());
-            int confirmacaoUsuario = confirmacaoUsuario(usuario, senha);
-            if(confirmacaoUsuario == -1) {
-                JOptionPane.showMessageDialog(null, "Usuario e senha não estão no sistema");
-                return;
-                }
-            
+
+            if(sistema.verificarPessoa(usuario, senha)) {
+                menu(new Pessoa(usuario, senha));
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "O usuário não é cadastrado no sistema");
             }
         }
+    }
 
     public static String gerarSenhaHex(String senha) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
@@ -85,11 +74,51 @@ public class Main {
         return senhahex;
     }
 
-    public static int confirmacaoUsuario(String usuario, String senha) {
-        List<Pessoa> pessoas = sistema.retornarPessoas();
-        for (Pessoa p: pessoas) {
-            if(p.getUsuario().equals(usuario) && p.getSenha().equals(senha)){return 1;}
+    public static void menu(Pessoa pessoa) {
+        boolean sair = false;
+        while(!sair) {
+            String opcao = JOptionPane.showInputDialog(null, "Escolha uma opção:\n" +
+                    "1 - Criar uma nova galeria\n" +
+                    "2 - Adicionar fotos\n" +
+                    "3 - Remover foto\n" +
+                    "4 - Ver fotos\n" +
+                    "5 - Procurar foto por data\n" +
+                    "6 - Procurar foto por filho\n" +
+                    "7 - Sair\n");
+
+            switch (opcao) {
+                case "1":
+                    String titulo = JOptionPane.showInputDialog("Digite o nome que será dado a galeria: ");
+                    pessoa.adicionarNovaGaleria(titulo);
+                    break;
+
+                case "2":
+                    JOptionPane.showMessageDialog(null, "O usuário não pode adicionar fotos, pois não possui galerias");
+                    String nomeGaleria = JOptionPane.showInputDialog(null, pessoa.getGaleria() + "Qual Galeria você escolhe para adicionar a foto: ");
+                    break;
+
+                case "3":
+                    break;
+
+                case "4":
+                    break;
+
+                case "5":
+                    break;
+
+                case "6":
+                    break;
+
+                case "7":
+                    sair = true;
+                    break;
+
+                default:
+                    JOptionPane.showMessageDialog(null, "Opção inválida");
+                    break;
+            }
         }
-        return -1;
     }
+
+
 }

@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class Foto {
 
+    //private String tituloDaGaleria;
     private String descricao;
     private LocalDate dataFoto;
     private String caminhoFoto;

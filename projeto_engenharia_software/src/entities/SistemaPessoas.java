@@ -44,4 +44,14 @@ public class SistemaPessoas {
         return this.pessoas;
     }
 
+    public boolean verificarPessoa(String usuario, String senha) {
+        Pessoa novaPessoa = new Pessoa(usuario, senha);
+        for(Pessoa pessoa : this.pessoas) {
+            if(pessoa.equals(novaPessoa)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
