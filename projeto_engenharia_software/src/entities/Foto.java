@@ -7,7 +7,7 @@ public class Foto {
 
     //private String tituloDaGaleria;
     private String descricao;
-    private LocalDate dataFoto;
+    private LocalDate dataFoto; // Pensar em mudar esse localdate para String, por causa do input da data pelo usuário
     private String caminhoFoto;
 
     public Foto(String descrição, LocalDate dataFoto, String caminhoFoto) {

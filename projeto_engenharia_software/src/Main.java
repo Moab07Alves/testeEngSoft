@@ -2,11 +2,14 @@ import entities.GravadorDeDados;
 import entities.Janela;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.List;
 
 import entities.*;
@@ -34,7 +37,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, entUsuario, "Digite a sua senha", JOptionPane.PLAIN_MESSAGE);
             senha = gerarSenhaHex(password.getText());
             Pessoa pessoa = new Pessoa(usuario, senha);
-            if(sistema.verificarPessoa(usuario, senha)) {
+            if(sistema.verificarPessoa(usuario, senha)) { // O que isso daqui faz?
                 menu(new Pessoa(usuario, senha));
             }
             else {
@@ -73,10 +76,22 @@ public class Main {
 
         return senhahex;
     }
+    public static File mostrarEscolhaFoto() {
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Arquivos de Imagem", "jpg", "jpeg", "png", "gif");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File arquivoSelecionado = chooser.getSelectedFile();
+            return arquivoSelecionado;
+        }
+        return null;
+    }
 
-    public static void menu(Pessoa pessoa) {
+    public static void menu(Pessoa pessoa) throws IOException {
         boolean sair = false;
-        while(!sair) {
+        while (!sair) {
             String opcao = JOptionPane.showInputDialog(null, "Escolha uma opção:\n" +
                     "1 - Criar uma nova galeria\n" +
                     "2 - Adicionar fotos\n" +
@@ -93,8 +108,19 @@ public class Main {
                     break;
 
                 case "2":
-                    JOptionPane.showMessageDialog(null, "O usuário não pode adicionar fotos, pois não possui galerias");
-                    String nomeGaleria = JOptionPane.showInputDialog(null, pessoa.getGaleria() + "Qual Galeria você escolhe para adicionar a foto: ");
+                    if(pessoa.getGaleria() != null) {
+                        String nomeGaleria = JOptionPane.showInputDialog(null, pessoa.getGaleria() + "Qual galeria você escolhe para adicionar a foto: ");
+                        Galeria gale = pessoa.procurarGaleriaPorTitulo(nomeGaleria);
+                        File fotoEscolhida = mostrarEscolhaFoto();
+                        String descricao = JOptionPane.showInputDialog(null, "Digite qual a descrição da foto");
+                        LocalDate data = LocalDate.now();
+                        //JOptionPane.showInputDialog(null, "Digite qual a data dessa foto"));
+                        Foto novaFoto = new Foto(descricao, data, fotoEscolhida.getAbsolutePath()); // Falta arrumar aqui, tem que achar um jeito que adicionar a foto no arquivo src
+                        // https://docs.oracle.com/javase/tutorial/essential/io/move.html#:~:text=You%20can%20move%20a%20file,Empty%20directories%20can%20be%20moved.
+                        gale.registrarFoto(novaFoto);
+                        Janela mostrarFoto = new Janela(novaFoto.getCaminhoFoto(), novaFoto.getDescricao(), "10/10/20"); // Apenas exemplo
+                    }
+                    else JOptionPane.showMessageDialog(null, "O usuário não possui nenhuma galeria");
                     break;
 
                 case "3":
@@ -119,6 +145,4 @@ public class Main {
             }
         }
     }
-
-
 }

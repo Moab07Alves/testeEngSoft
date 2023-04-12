@@ -1,5 +1,6 @@
 package entities;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -47,11 +48,19 @@ public class Pessoa {
             for(Galeria gale: this.galeria) {
                titulosGaleria.append(gale.getTitulo() + " ---- QUANTIDADE DE FOTOS:  " + gale.quantidadeFotos() + "\n");
             }
+            return titulosGaleria;
         }
         else {
-            titulosGaleria.append("O usuário não possui nenhuma galeria");
+            //titulosGaleria.append("O usuário não possui nenhuma galeria");
+            return null;
         }
+    }
 
+    public Galeria procurarGaleriaPorTitulo(String titulo){
+        for (Galeria gale: this.galeria) {
+            gale.getTitulo().equals(titulo);
+            return gale;
+        }
         return null;
     }
 
