@@ -56,6 +56,9 @@ public class Pessoa {
         }
     }
 
+    public List<Galeria> getListaGaleria(){
+        return this.galeria;
+    }
     public Galeria procurarGaleriaPorTitulo(String titulo){
         for (Galeria gale: this.galeria) {
             gale.getTitulo().equals(titulo);

@@ -23,6 +23,7 @@ public class Main {
     static final int MAX = 1000;
     static SistemaPessoas sistema = new SistemaPessoas(MAX);
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+
         try {
             sistema.recuperarPessoas();
         } catch(FileNotFoundException e) {
@@ -34,22 +35,20 @@ public class Main {
         int novoUsuario = JOptionPane.showConfirmDialog(null,"Novo Usuário?(Yes = Sim, No = Não)","Escolha um",JOptionPane.YES_NO_OPTION);
 
         if(novoUsuario == 0) { // Opcao = 0 - Sim, o usuário não tem acesso ao nosso sistema
-            usuario = JOptionPane.showInputDialog("Digite o seu novo nome de usuário");
-            JPasswordField password = new JPasswordField(10);
-            password.setEchoChar('*');
-            JPanel entUsuario = new JPanel();
-            entUsuario.add(password);
-            JOptionPane.showMessageDialog(null, entUsuario, "Digite a sua senha", JOptionPane.PLAIN_MESSAGE);
-            senha = gerarSenhaHex(password.getText());
-            Pessoa pessoa = new Pessoa(usuario, senha);
-            if(sistema.verificarPessoa(usuario, senha)) {
-                menu(new Pessoa(usuario, senha));
-            }
-            else {
-                sistema.addPessoa(pessoa);
-                sistema.salvarPessoas();
-                menu(pessoa);
-            }
+            do {
+                usuario = JOptionPane.showInputDialog("Digite o seu novo nome de usuário");
+                JPasswordField password = new JPasswordField(10);
+                password.setEchoChar('*');
+                JPanel entUsuario = new JPanel();
+                entUsuario.add(password);
+                JOptionPane.showMessageDialog(null, entUsuario, "Digite a sua senha", JOptionPane.PLAIN_MESSAGE);
+                senha = gerarSenhaHex(password.getText());
+                Pessoa pessoa = new Pessoa(usuario, senha);
+                if(sistema.verificarPessoa(usuario, senha)){
+                    JOptionPane.showMessageDialog(null, "Usuário já cadastrado, escolha outro nome de usuário");
+                }
+            }while(sistema.verificarPessoa(usuario, senha));
+            menu(new Pessoa(usuario, senha));
         }
         else{ // Opcao = 1 - Não, o usuário já tem acesso ao nosso sistema
             usuario = JOptionPane.showInputDialog("Digite o seu novo nome de usuário");
@@ -119,17 +118,9 @@ public class Main {
                         File fotoEscolhida = mostrarEscolhaFoto();
                         String descricao = JOptionPane.showInputDialog(null, "Digite qual a descrição da foto");
                         String data = JOptionPane.showInputDialog(null, "Digite qual a data que a foto foi tirada?");
-                        Path original = Paths.get(fotoEscolhida.getAbsolutePath(), "");
-                        Path novo = Paths.get("/" + fotoEscolhida.getName());
-                        try {
-                            Files.move(original, novo, StandardCopyOption.REPLACE_EXISTING);
-                            JOptionPane.showMessageDialog(null, "test");
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                        //gale.registrarFoto(novaFoto);
-                        //Janela mostrarFoto = new Janela(novaFoto.getCaminhoFoto(), novaFoto.getDescricao(), "10/10/20"); // Apenas exemplo
+                        JOptionPane.showMessageDialog(null, "", "Descrição: " + descricao  + " Data: " + data, JOptionPane.INFORMATION_MESSAGE, new ImageIcon(fotoEscolhida.getAbsolutePath()));
+                        Foto novaFoto = new Foto(descricao, data, fotoEscolhida.getAbsolutePath());
+                        gale.registrarFoto(novaFoto);
                     }
                     else JOptionPane.showMessageDialog(null, "O usuário não possui nenhuma galeria");
                     break;
@@ -148,6 +139,7 @@ public class Main {
 
                 case "7":
                     sair = true;
+                    sistema.salvarPessoas();
                     break;
 
                 default:
