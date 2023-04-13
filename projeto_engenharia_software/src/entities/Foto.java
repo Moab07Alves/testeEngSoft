@@ -7,16 +7,16 @@ public class Foto {
 
     //private String tituloDaGaleria;
     private String descricao;
-    private LocalDate dataFoto; // Pensar em mudar esse localdate para String, por causa do input da data pelo usuário
+    private String dataFoto; // Pensar em mudar esse localdate para String, por causa do input da data pelo usuário
     private String caminhoFoto;
 
-    public Foto(String descrição, LocalDate dataFoto, String caminhoFoto) {
+    public Foto(String descrição, String dataFoto, String caminhoFoto) {
         this.descricao = descrição;
         this.dataFoto = dataFoto;
         this.caminhoFoto = caminhoFoto;
     }
 
-    public Foto(LocalDate dataFoto, String caminhoFoto) {
+    public Foto(String dataFoto, String caminhoFoto) {
         this("", dataFoto, caminhoFoto);
     }
 
@@ -28,7 +28,7 @@ public class Foto {
         this.descricao = descricao;
     }
 
-    public LocalDate getDataFoto() {
+    public String getDataFoto() {
         return dataFoto;
     }
 

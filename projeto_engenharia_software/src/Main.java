@@ -3,10 +3,15 @@ import entities.Janela;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
@@ -37,7 +42,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, entUsuario, "Digite a sua senha", JOptionPane.PLAIN_MESSAGE);
             senha = gerarSenhaHex(password.getText());
             Pessoa pessoa = new Pessoa(usuario, senha);
-            if(sistema.verificarPessoa(usuario, senha)) { // O que isso daqui faz?
+            if(sistema.verificarPessoa(usuario, senha)) {
                 menu(new Pessoa(usuario, senha));
             }
             else {
@@ -113,12 +118,18 @@ public class Main {
                         Galeria gale = pessoa.procurarGaleriaPorTitulo(nomeGaleria);
                         File fotoEscolhida = mostrarEscolhaFoto();
                         String descricao = JOptionPane.showInputDialog(null, "Digite qual a descrição da foto");
-                        LocalDate data = LocalDate.now();
-                        //JOptionPane.showInputDialog(null, "Digite qual a data dessa foto"));
-                        Foto novaFoto = new Foto(descricao, data, fotoEscolhida.getAbsolutePath()); // Falta arrumar aqui, tem que achar um jeito que adicionar a foto no arquivo src
-                        // https://docs.oracle.com/javase/tutorial/essential/io/move.html#:~:text=You%20can%20move%20a%20file,Empty%20directories%20can%20be%20moved.
-                        gale.registrarFoto(novaFoto);
-                        Janela mostrarFoto = new Janela(novaFoto.getCaminhoFoto(), novaFoto.getDescricao(), "10/10/20"); // Apenas exemplo
+                        String data = JOptionPane.showInputDialog(null, "Digite qual a data que a foto foi tirada?");
+                        Path original = Paths.get(fotoEscolhida.getAbsolutePath(), "");
+                        Path novo = Paths.get("/" + fotoEscolhida.getName());
+                        try {
+                            Files.move(original, novo, StandardCopyOption.REPLACE_EXISTING);
+                            JOptionPane.showMessageDialog(null, "test");
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        //gale.registrarFoto(novaFoto);
+                        //Janela mostrarFoto = new Janela(novaFoto.getCaminhoFoto(), novaFoto.getDescricao(), "10/10/20"); // Apenas exemplo
                     }
                     else JOptionPane.showMessageDialog(null, "O usuário não possui nenhuma galeria");
                     break;
