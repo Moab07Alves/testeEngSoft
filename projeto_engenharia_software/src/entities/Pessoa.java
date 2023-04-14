@@ -67,6 +67,24 @@ public class Pessoa {
         return null;
     }
 
+    public void mostrarTodasFotos(){
+        for (Galeria a: this.galeria) {
+            for (Foto f: a.getListaFotos()) {
+                JOptionPane.showMessageDialog(null, "", "Descrição: " + f.getDescricao()  + " Data: " + f.getDataFoto(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(f.getCaminhoFoto()));
+            }
+        }
+    }
+
+    public void mostrarFotoPorGaleria(String nomeGaleria) {
+        for (Galeria a: this.galeria) {
+            if (a.getTitulo().equals(nomeGaleria)){
+                for (Foto f: a.getListaFotos()) {
+                    JOptionPane.showMessageDialog(null, "", "Descrição: " + f.getDescricao()  + " Data: " + f.getDataFoto(), JOptionPane.INFORMATION_MESSAGE, new ImageIcon(f.getCaminhoFoto()));
+                }
+            }
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,4 +96,6 @@ public class Pessoa {
     public int hashCode() {
         return Objects.hash(getUsuario(), getSenha());
     }
+
+
 }

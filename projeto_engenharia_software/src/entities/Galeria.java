@@ -25,7 +25,7 @@ public class Galeria {
     public void salvarFotos() throws IOException {
        List<String> dadosFotos = new ArrayList<>();
        for (Foto foto: this.fotos) {
-           dadosFotos.add(foto.getDescricao() + "#" + foto.getDataFoto() + "#" + foto.getCaminhoFoto());
+           dadosFotos.add(this.titulo + "#" + foto.getDescricao() + "#" + foto.getDataFoto() + "#" + foto.getCaminhoFoto());
        }
        gravadorDadosFotos.gravaTextoEmArquivo(dadosFotos);
     }
@@ -34,7 +34,7 @@ public class Galeria {
         List<String> dadosFotos = gravadorDadosFotos.recuperarTextoDeArquivo();
         for (String dados: dadosFotos) {
             String[] linha = dados.split("#");
-            Foto foto = new Foto(linha[0], linha[1], linha[2]);
+            Foto foto = new Foto(linha[0], linha[1], linha[2], linha[3]);
             this.fotos.add(foto);
         }
     }
@@ -51,4 +51,28 @@ public class Galeria {
         return this.fotos.size();
     }
 
+    public StringBuilder getFotos(){
+        StringBuilder descricaoFoto = new StringBuilder();
+        if(!this.fotos.isEmpty()){
+            descricaoFoto.append("\tFotos do Usuário\n\n");
+            for (Foto f: this.fotos ) {
+                descricaoFoto.append(f.getDescricao() + " " + f.getDataFoto() + "\n");
+            }
+            return descricaoFoto;
+        }
+        else return null;
+    }
+
+    public List<Foto> getListaFotos() {
+        return fotos;
+    }
+
+    public void apagarFoto(String descricao){
+        for (Foto f: this.fotos) {
+            if(f.getDescricao().equals(descricao)){
+                fotos.remove(f);
+                break;
+            }
+        }
+    }
 }

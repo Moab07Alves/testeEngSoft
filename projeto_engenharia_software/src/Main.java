@@ -102,7 +102,7 @@ public class Main {
                     "3 - Remover foto\n" +
                     "4 - Ver fotos\n" +
                     "5 - Procurar foto por data\n" +
-                    "6 - Procurar foto por filho\n" +
+                    "6 - Procurar foto por galeria\n" +
                     "7 - Sair\n");
 
             switch (opcao) {
@@ -119,22 +119,38 @@ public class Main {
                         String descricao = JOptionPane.showInputDialog(null, "Digite qual a descrição da foto");
                         String data = JOptionPane.showInputDialog(null, "Digite qual a data que a foto foi tirada?");
                         JOptionPane.showMessageDialog(null, "", "Descrição: " + descricao  + " Data: " + data, JOptionPane.INFORMATION_MESSAGE, new ImageIcon(fotoEscolhida.getAbsolutePath()));
-                        Foto novaFoto = new Foto(descricao, data, fotoEscolhida.getAbsolutePath());
+                        Foto novaFoto = new Foto(gale.getTitulo(), descricao, data, fotoEscolhida.getAbsolutePath());
                         gale.registrarFoto(novaFoto);
                     }
                     else JOptionPane.showMessageDialog(null, "O usuário não possui nenhuma galeria");
                     break;
 
                 case "3":
+                    if(pessoa.getGaleria() != null){
+                        String nomeGaleria = JOptionPane.showInputDialog(null, pessoa.getGaleria() + "Qual galeria você escolhe para remover a foto: ");
+                        Galeria gale = pessoa.procurarGaleriaPorTitulo(nomeGaleria);
+                        String descricaoFoto = JOptionPane.showInputDialog(null, gale.getFotos()+ "Digite a descrição da foto que você quer apagar: ");
+                        gale.apagarFoto(descricaoFoto);
+                    }
+                    else JOptionPane.showMessageDialog(null, "O usuário não possui nenhuma galeria");
                     break;
 
                 case "4":
+                    if(pessoa.getGaleria() != null){
+                        pessoa.mostrarTodasFotos();
+                    }
+                    else JOptionPane.showMessageDialog(null, "O usuário não possui nenhuma galeria");
                     break;
 
                 case "5":
                     break;
 
                 case "6":
+                    if(pessoa.getGaleria() != null){
+                        String nomeGaleria = JOptionPane.showInputDialog(null, pessoa.getGaleria() + "Qual galeria você escolhe para mostrar as fotos: ");
+                        pessoa.mostrarFotoPorGaleria(nomeGaleria);
+                    }
+                    else JOptionPane.showMessageDialog(null, "O usuário não possui nenhuma galeria");
                     break;
 
                 case "7":
